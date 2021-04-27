@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+
+<section class="portfolio-block contact">
+    <div class="container">
+        <form method="post" action="{% url 'login' %}">
+            <h2 class="sr-only">Login Form</h2>
+            <div class = "form-group">
+                {{ form|crispy }}        
+                {% csrf_token %}
+            </div>
+            <input type="hidden" name="next" value="{{ next }}" />
+            <div class="form-group">
+                <button class="btn btn-primary" type="submit">Log In</button>
+            </div>
+            <a class="forgot" href="#">Forgot your email or password?</a>
+        </form>
+    </div>
+</section>
+{% endblock %}

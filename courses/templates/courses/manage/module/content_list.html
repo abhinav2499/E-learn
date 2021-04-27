@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% load course %}
+{% block title %}
+Module {{ module.order|add:1 }}: {{ module.title }}
+{% endblock %}
+
+{% block content %}
+
+{% with course=module.course %}
+<section class="portfolio-block projects-with-sidebar">
+    <div class="container">
+        <div class="heading">
+            <h2>Course "{{ course.title }}"</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <h3>Modules</h3>
+                <ul class="list-unstyled sidebar">
+                    {% for m in course.modules.all %}
+                    <li data-id="{{m.id}}">
+                        <a href="{% url 'module_content_list' m.id %}" {% if m == module %} class="active" {% endif %}>
+                            <span>
+                                Module <span class="order">{{ m.order|add:1 }}</span>
+                            </span>
+                            <br>
+                            {{ m.title }}
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li>No modules yet.</li>
+                    {% endfor %}
+                    <br>
+                    <p><a href="{% url 'course_module_update' course.id %}" style="color: #0ea0ff;">Edit modules</a></p>
+                </ul>
+            </div>
+            <div class="col-md-10">
+                <h2>Module {{ module.order|add:1 }}: {{ module.title }}</h2>
+                <h4>Module contents:</h4>
+                <div class="row">
+                    {% for content in module.contents.all %}
+                    <div class="col-md-6 col-lg-8">
+                        {% with item=content.item %}
+                        <div class="project-card-no-image">
+                            <h3>{{ item }} ({{ item|model_name }})</h3>
+                            <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'module_content_update' module.id item|model_name item.id%}">Edit</a>
+                            <div class="tags">
+                                <form action="{% url 'module_content_delete' content.id %}" method="post" style="box-shadow: none;padding: 0;">
+                                    <button class="btn btn-outline-primary btn-sm" type="submit">Delete</button>
+                                    {% csrf_token %}
+                                </form>
+                            </div>
+                        </div>
+                        {% endwith %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <h4>Add new content:</h4>
+                <div>
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'module_content_create' module.id 'text' %}">Text</a>
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'module_content_create' module.id 'image' %}">Image</a>
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'module_content_create' module.id 'video' %}">Video</a>
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'module_content_create' module.id 'file' %}">File</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endwith %}
+{% endblock %}

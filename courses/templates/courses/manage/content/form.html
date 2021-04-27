@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title%}
+{% if object %}
+Edit content "{{ object.title }}"
+{% else %}
+Add new content
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="portfolio-block contact">
+    <div class="container">
+        <div class="heading">
+            <h2>
+                {% if object %}
+                Edit content "{{ object.title }}"
+                {% else %}
+                Add new content
+                {% endif %}
+            </h2>
+        </div>
+        <form method="post" enctype="multipart/form-data">
+            <h2>Content info</h2>
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="form-group"><button class="btn btn-primary " type="submit">Save content</button></div>
+        </form>
+    </div>
+</section>
+{% endblock %}

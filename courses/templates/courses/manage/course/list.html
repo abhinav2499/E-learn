@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}My courses{% endblock %}
+{% block content %}
+<section class="portfolio-block project-no-images">
+    <div class="container">
+        <div class="heading">
+            <h2>My courses</h2>
+        </div>
+        <div class="row">
+            {% for course in object_list %}
+            <div class="col-md-6 col-lg-6">
+                <div class="project-card-no-image">
+                    <h3>{{ course.title }}</h3>
+                    <h4>{{ course.modules.count }} Modules</h4>
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'course_edit' course.id %}">Edit</a>
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'course_delete' course.id %}">Delete</a>
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'course_module_update' course.id %}">Edit modules</a>
+                    {% if course.modules.count > 0 %}
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'module_content_list' course.modules.first.id %}">Manage contents</a>
+                    <!-- <div class="tags"><a href="#">Python</a></div> -->
+                    {% endif %}
+                </div>
+            </div>
+            {% empty %}
+            <p>You haven't created any courses yet.</p>
+            {% endfor %}
+        </div>
+        <a class="btn btn-primary" role="button" href="{% url 'course_create' %}">Create new course</a>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}  
+{% if subject %}    
+{{ subject.title }} courses  
+{% else %}    
+All courses  
+{% endif %}
+{% endblock %}
+{% block content %}  
+<section class="portfolio-block projects-with-sidebar">
+    <div class="container">
+        <div class="heading">
+            <h2>
+                {% if subject %}      
+                {{ subject.title }} courses    
+                {% else %}      
+                All courses    
+                {% endif %}
+            </h2>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <ul class="list-unstyled sidebar">
+                    <li><a {% if not subject %}class="active"{% endif %} href="{% url 'course_list' %}">All</a></li>
+                    {% for s in subjects %}      
+                    <li>          
+                        <a {% if subject == s %}class="active"{% endif %} href="{% url 'course_list_subject' s.slug %}">            
+                            {{ s.title }}            
+                            <br><span style="font-size: small;">{{ s.total_courses }} courses</span>          
+                        </a>        
+                    </li>   
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-10">
+                <div class="row">
+                    {% for course in courses %}
+                    {% with subject=course.subject %}
+                    <div class="col-md-6 col-lg-4">
+                        <div class="project-card-no-image">
+                            <h3>          
+                                <a href="{% url 'course_detail' course.slug %}">            
+                                    {{ course.title }}          
+                                </a>        
+                            </h3>
+                            <h4>Instructor: {{ course.owner.get_full_name }}</h4>
+                            <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'course_detail' course.slug %}">See More</a>
+                            <div class="tags"><a href="{% url 'course_list_subject' subject.slug %}">{{ subject }}</a></div>
+                        </div>
+                    </div>
+                    {% endwith %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

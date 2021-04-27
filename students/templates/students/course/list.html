@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}My courses{% endblock %}
+{% block content %}  
+
+<section class="portfolio-block project-no-images">
+    <div class="container">
+        <div class="heading">
+            <h2>Enrolled courses</h2>
+        </div>
+        <div class="row">
+            {% for course in object_list %}
+            <div class="col-md-6 col-lg-4">
+                <div class="project-card-no-image">
+                    <h3>{{ course.title }}</h3>
+                    <h4>Instructor: {{ course.owner.get_full_name }}</h4>
+                    <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'student_course_detail' course.id %}">Access contents</a>
+                </div>
+            </div>
+            {% empty %}
+            <p>
+                You are not enrolled in any courses yet.<br>
+                <!-- <a href="{% url 'course_list' %}">Browse courses</a>
+                to enroll in a course. -->
+                <a class="btn btn-outline-primary btn-sm" role="button" href="{% url 'course_list' %}">Browse courses</a>
+            </p> 
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

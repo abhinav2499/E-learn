@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load cache %}
+{% block title %}  
+{{ object.title }}
+{% endblock %}
+{% block content %}  
+
+<section class="portfolio-block projects-with-sidebar">
+    <div class="container">
+        <div class="heading">
+            <h2>{{ module.title }}</h2>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <h3>Modules</h3>
+                <ul class="list-unstyled sidebar">
+                    {% for m in object.modules.all %}
+                    <li data-id="{{m.id}}">
+                        <a href="{% url 'student_course_detail_module' object.id m.id %}" {% if m == module %} class="active" {% endif %}>
+                            <span>
+                                Module <span class="order">{{ m.order|add:1 }}</span>
+                            </span>
+                            <br>
+                            {{ m.title }}
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li>No modules yet.</li>
+                    {% endfor %}
+                </ul>
+                <br>
+                <p><a href="{% url 'chat:course_chat_room' object.id %}" style="color: #0ea0ff;">Course chat room</a></p>
+            </div>
+            <div class="col-md-10">
+                {% cache 600 module_contents module %}
+                {% for content in module.contents.all %}      
+                {% with item=content.item %}        
+                <h2>{{ item.title }}</h2>        
+                {{ item.render }}      
+                {% endwith %}    
+                {% endfor %}  
+                {% endcache %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
